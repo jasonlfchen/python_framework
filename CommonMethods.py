@@ -37,66 +37,7 @@ class CommonMethods():
             self.driver.implicitly_wait(10)
             print('URL navigation')
 
-    def openBrowser(self):
-        localBrowserName = 'firefox'
-        remoteBrowserType = 'firefox'
-        platform = 'windows'
-        hubUrl = 'localhost:8080'
-        os.environ["webdriver.chrome.driver"]=self.chromePath
-        os.environ["webdriver.ie.driver"]=self.iePath
-        capabilities = DesiredCapabilities
-        if(platform!='mac'):
-            if(localBrowserName=='firefox'):
-                self.driver = webdriver.Firefox()
-            elif(localBrowserName=='chrome'):
-                self.driver = webdriver.Chrome()
-            elif(localBrowserName=='safari'):
-                self.driver = webdriver.Safari()
-            elif(localBrowserName=='ie'):
-                capabilities = DesiredCapabilities.INTERNETEXPLORER.copy()
-                capabilities['ignoreProtectedModeSettings'] = True
-                self.driver = webdriver.Ie(capabilities)
-            elif(localBrowserName=='remote'):
-                print('Using remote browser')
-                if(remoteBrowserType=='firefox'):
-                    capabilities = DesiredCapabilities.FIREFOX.copy()
-                    capabilities['platform'] = platform
-                    capabilities['browserName'] = remoteBrowserType
-                    #capabilities['version'] = ''
-                    self.driver = webdriver.Remote(command_executor=hubUrl,desired_capabilities=capabilities)
-                elif(remoteBrowserType=='ie'):
-                    capabilities = DesiredCapabilities.INTERNETEXPLORER.copy()
-                    capabilities['ignoreProtectedModeSettings'] = True
-                    capabilities['platform'] = platform
-                    capabilities['browserName'] = remoteBrowserType
-                    #capabilities['version'] = ''
-                    self.driver = webdriver.Remote(command_executor=hubUrl,desired_capabilities=capabilities)
-                elif(remoteBrowserType=='chrome'):
-                    capabilities = DesiredCapabilities.CHROME.copy()
-                    capabilities['ignoreProtectedModeSettings'] = True
-                    capabilities['platform'] = platform
-                    capabilities['browserName'] = remoteBrowserType
-                    #capabilities['version']
-                    self.driver = webdriver.Remote(command_executor=hubUrl,desired_capabilities=capabilities)
-                elif(remoteBrowserType=='safari'):
-                    capabilities = DesiredCapabilities.SAFARI.copy()
-                    capabilities['ignoreProtectedModeSettings'] = True
-                    capabilities['platform'] = platform
-                    capabilities['browserName'] = remoteBrowserType
-                    #capabilities['version']
-                    self.driver = webdriver.Remote(command_executor=hubUrl,desired_capabilities=capabilities)
-        elif(platform=='mac'):
-            if(localBrowserName=='remote'):
-                self.driver = webdriver.Remote(command_executor=hubUrl,desired_capabilities=DesiredCapabilities.SAFARI.copy())
-                #self.driver =
-            else:
-                capabilities = DesiredCapabilities.SAFARI.copy()
-                self.driver = webdriver.Safari(capabilities)
-        self.driver.delete_all_cookies()
-        self.driver.implicitly_wait(10)
-        self.driver.maximize_window()
-
-    def openBrowser(self, remoteBrowserType, localBrowserName, platform, hubUrl):
+    def openBrowser(self, remoteBrowserType = 'firefox', localBrowserName = 'firefox', platform = 'window', hubUrl = 'http://localhost:5555/wd/hub'):
         os.environ["webdriver.chrome.driver"]=self.chromePath
         os.environ["webdriver.ie.driver"]=self.iePath
         capabilities = DesiredCapabilities
