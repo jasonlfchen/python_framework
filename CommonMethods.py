@@ -139,10 +139,10 @@ class CommonMethods():
     def set_value_to_element(self, driver, by, by_value, string_value):
         try:
             string_locator = self.driver.find_element(by, by_value)
-            elementName = self.driver.find_element(by, by_value).get_attribute('name')
+            element_name = self.driver.find_element(by, by_value).get_attribute('name')
             string_locator.send_keys(string_value)
             print(string_value + ' entered')
         except NoSuchElementException:
-            print('Element not found')
+            print('Element ' +  element_name + ' not found')
 
 
