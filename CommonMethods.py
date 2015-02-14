@@ -1,4 +1,4 @@
-__author__ = 'Yunxi Lin'
+__authors__ = 'Yunxi Lin, Jason Chen'
 import os
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -41,46 +41,35 @@ class CommonMethods():
         os.environ["webdriver.chrome.driver"]=self.chrome_path
         os.environ["webdriver.ie.driver"]=self.ie_path
         capabilities = DesiredCapabilities
-        if(platform!='mac'):
-            if(local_browser_name=='firefox'):
-                self.driver = webdriver.Firefox()
-            elif(local_browser_name=='chrome'):
-                self.driver = webdriver.Chrome()
-            elif(local_browser_name=='safari'):
-                self.driver = webdriver.Safari()
-            elif(local_browser_name=='ie'):
+        if(local_browser_name=='firefox'):
+            self.driver = webdriver.Firefox()
+        if(local_browser_name=='chrome'):
+            self.driver = webdriver.Chrome()
+        if(local_browser_name=='safari'):
+            self.driver = webdriver.Safari()
+        if(local_browser_name=='ie'):
+            capabilities = DesiredCapabilities.INTERNETEXPLORER.copy()
+            capabilities['ignoreProtectedModeSettings'] = True
+            self.driver = webdriver.Ie(capabilities)
+        if(local_browser_name=='remote'):
+            print('Using remote browser')
+            if(remote_browser_type=='firefox'):
+                capabilities = DesiredCapabilities.FIREFOX.copy()
+                #capabilities['version'] = ''
+            if(remote_browser_type=='ie'):
                 capabilities = DesiredCapabilities.INTERNETEXPLORER.copy()
+                #capabilities['version'] = ''
+            if(remote_browser_type=='chrome'):
+                capabilities = DesiredCapabilities.CHROME.copy()
+                #capabilities['version']
+            if(remote_browser_type=='safari'):
+                capabilities = DesiredCapabilities.SAFARI.copy()
+                #capabilities['version']
+            if(remote_browser_type!='firefox'):
                 capabilities['ignoreProtectedModeSettings'] = True
-                self.driver = webdriver.Ie(capabilities)
-            elif(local_browser_name=='remote'):
-                print('Using remote browser')
-                if(remote_browser_type=='firefox'):
-                    capabilities = DesiredCapabilities.FIREFOX.copy()
-                    capabilities['platform'] = platform
-                    capabilities['browserName'] = remote_browser_type
-                    #capabilities['version'] = ''
-                    self.driver = webdriver.Remote(command_executor=hub_url,desired_capabilities=capabilities)
-                elif(remote_browser_type=='ie'):
-                    capabilities = DesiredCapabilities.INTERNETEXPLORER.copy()
-                    capabilities['ignoreProtectedModeSettings'] = True
-                    capabilities['platform'] = platform
-                    capabilities['browserName'] = remote_browser_type
-                    #capabilities['version'] = ''
-                    self.driver = webdriver.Remote(command_executor=hub_url,desired_capabilities=capabilities)
-                elif(remote_browser_type=='chrome'):
-                    capabilities = DesiredCapabilities.CHROME.copy()
-                    capabilities['ignoreProtectedModeSettings'] = True
-                    capabilities['platform'] = platform
-                    capabilities['browserName'] = remote_browser_type
-                    #capabilities['version']
-                    self.driver = webdriver.Remote(command_executor=hub_url,desired_capabilities=capabilities)
-                elif(remote_browser_type=='safari'):
-                    capabilities = DesiredCapabilities.SAFARI.copy()
-                    capabilities['ignoreProtectedModeSettings'] = True
-                    capabilities['platform'] = platform
-                    capabilities['browserName'] = remote_browser_type
-                    #capabilities['version']
-                    self.driver = webdriver.Remote(command_executor=hub_url,desired_capabilities=capabilities)
+            capabilities['platform'] = platform
+            capabilities['browserName'] = remote_browser_type
+            self.driver = webdriver.Remote(command_executor=hub_url,desired_capabilities=capabilities)
         elif(platform=='mac'):
             if(local_browser_name=='remote'):
                 self.driver = webdriver.Remote(command_executor=hub_url,desired_capabilities=DesiredCapabilities.SAFARI.copy())
