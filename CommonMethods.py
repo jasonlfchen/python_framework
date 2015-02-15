@@ -57,49 +57,43 @@ class CommonMethods():
 
         if(local_browser_name == 'chrome'):
             os.environ['webdriver.chrome.driver']=self.chrome_path
-        elif(local_browser_name == 'ie'):
+        if(local_browser_name == 'ie'):
             os.environ['webdriver.ie.driver']=self.ie_path
-        elif(local_browser_name == 'safari'):
-            os.environ['webdriver.safari.driver']=self.ie_path
+        if(local_browser_name == 'safari'):
+            os.environ['webdriver.safari.driver']=self.safari_path
             os.environ['webdriver.safari.noinstall']=True
 
         capabilities = DesiredCapabilities
 
         if(local_browser_name=='firefox'):
             self.driver = webdriver.Firefox()
-        elif(local_browser_name=='chrome'):
+        if(local_browser_name=='chrome'):
             self.driver = webdriver.Chrome(self.chrome_path)
-        elif(local_browser_name=='safari'):
+        if(local_browser_name=='safari'):
             self.driver = webdriver.Safari(self.safari_path)
-        elif(local_browser_name=='ie'):
+        if(local_browser_name=='ie'):
             #capabilities = DesiredCapabilities.INTERNETEXPLORER.copy()
             #capabilities['ignoreProtectedModeSettings'] = True
             self.driver = webdriver.Ie(self.ie_path)
-        elif(local_browser_name=='remote'):
+        if(local_browser_name=='remote'):
             print('Using remote browser')
             if(remote_browser_type=='firefox'):
                 capabilities = DesiredCapabilities.FIREFOX.copy()
                 self.driver = webdriver.Remote(command_executor=hub_url,desired_capabilities=capabilities)
-            elif(remote_browser_type=='ie'):
+            if(remote_browser_type=='ie'):
                 capabilities = DesiredCapabilities.INTERNETEXPLORER.copy()
                 capabilities['ignoreProtectedModeSettings'] = True
                 #capabilities['platform'] = platform
-                capabilities['browserName'] = remote_browser_type
-                capabilities['version'] = version
-                self.driver = webdriver.Remote(command_executor=hub_url,desired_capabilities=capabilities)
-            elif(remote_browser_type=='chrome'):
+            if(remote_browser_type=='chrome'):
                 capabilities = DesiredCapabilities.CHROME.copy()
                 #capabilities['platform'] = platform
-                capabilities['browserName'] = remote_browser_type
-                capabilities['version'] = version
-                self.driver = webdriver.Remote(command_executor=hub_url,desired_capabilities=capabilities)
-            elif(remote_browser_type=='safari'):
+            if(remote_browser_type=='safari'):
                 capabilities = DesiredCapabilities.SAFARI.copy()
                 capabilities['ignoreProtectedModeSettings'] = True
                 #capabilities['platform'] = platform
-                capabilities['browserName'] = remote_browser_type
-                capabilities['version'] = version
-                self.driver = webdriver.Remote(command_executor=hub_url,desired_capabilities=capabilities)
+            capabilities['browserName'] = remote_browser_type
+            capabilities['version'] = version
+            self.driver = webdriver.Remote(command_executor=hub_url,desired_capabilities=capabilities)
 
         self.driver.delete_all_cookies()
         self.driver.implicitly_wait(10)
