@@ -1,3 +1,6 @@
+# sample of how to configure & create the logger
+
+__auther__ = 'Sam Albin'
 import logging
 import logging.config
 
