@@ -1,10 +1,14 @@
 __author__ = 'Yunxi Lin'
 import os
 from selenium import webdriver
+from selenium.webdriver.remote import webelement
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support.ui import Select
 
 class CommonMethods():
 
@@ -55,9 +59,9 @@ class CommonMethods():
         if(browser_name == 'safari'):
             self.safari_path = browser_path
 
-    def open_browser(self, local_browser_name = 'firefox', cmremote_browser_type = 'firefox', 
+    def open_browser(self, local_browser_name = 'firefox', remote_browser_type = 'firefox',
                      version = '37', hub_url = 'http://localhost:5555/wd/hub'):
-        
+
         os.environ['webdriver.chrome.driver']=self.chrome_path
         os.environ['webdriver.ie.driver']=self.ie_path
         os.environ['webdriver.phantomjs.driver']=self.phantomjs_path
@@ -159,7 +163,36 @@ class CommonMethods():
             string_locator.send_keys(string_value)
             print(string_value + ' entered')
         except NoSuchElementException:
-            print('Element ' +  element_name + ' not found')
+            print('Element ' + element_name + ' not found')
+
+    """
+        element control
+    """
+    def select_dropdown_by_value(self, driver, by, by_value, expected_value):
+        locator = driver.find_element(by,by_value)
+        get_drop_down_values = locator.find_elements_by_tag_name("option")
+        is_match = False
+        for item in get_drop_down_values:
+            if(item.get_attribute("value") is not None
+            and item.get_attribute("value")==expected_value):
+                item.click()
+                is_match = True
+                break
+        if(is_match is not True):
+            print(expected_value + ' not found in dropdown')
+
+    def select_dropdown_by_text(self, driver, by, by_value, expected_text):
+        try:
+            select = Select(driver.find_element(by, by_value))
+            select.select_by_visible_text(expected_text)
+        except:
+            print(expected_text + ' not found')
+
+    def get_driver(self):
+        return self.driver
+
+    def set_driver(self, driver):
+        self.driver = driver;
 
     """
         Temp Section
@@ -170,4 +203,6 @@ class CommonMethods():
     def assert_title(self, expected_title):
         actual_title = self.driver.title
         assert expected_title == actual_title, 'Expected: ' + expected_title + ' ' + 'Actual: ' + actual_title
+
+
 
