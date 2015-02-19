@@ -10,10 +10,10 @@ from selenium.webdriver.support import expected_conditions
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import Select
 
-class CommonMethods():
 
-    def __init__(self):
-        self.driver = webdriver
+class CommonMethods(object):
+    def __init__(self,driver = webdriver):
+        self.driver = driver
         self.chrome_path = 'C:\\selenium\\driver\\chromedriver.exe'
         self.ie_path = 'C:\\selenium\\driver\\IEDriverServer.exe'
         self.phantomjs_path = 'C:\\selenium\\driver\\phantomjs.exe'
@@ -23,12 +23,13 @@ class CommonMethods():
     """
         navigation
     """
+
     def get_url(self, base_url):
         try:
             app_url = base_url
         except:
             app_url = 'www.google.com'
-            print('URL not found, opening '+ app_url)
+            print('URL not found, opening ' + app_url)
         return app_url
 
     def get_page(self, url):
@@ -49,56 +50,57 @@ class CommonMethods():
     """
         browser control
     """
-    def set_browser_path(self,browser_name,browser_path):
-        if(browser_name == 'chrome'):
+
+    def set_browser_path(self, browser_name, browser_path):
+        if (browser_name == 'chrome'):
             self.chrome_path = browser_path
-        if(browser_name == 'ie'):
+        if (browser_name == 'ie'):
             self.ie_path = browser_path
-        if(browser_name == 'phantomjs'):
+        if (browser_name == 'phantomjs'):
             self.phantomjs_path = browser_path
-        if(browser_name == 'safari'):
+        if (browser_name == 'safari'):
             self.safari_path = browser_path
 
-    def open_browser(self, local_browser_name = 'firefox', remote_browser_type = 'firefox',
-                     version = '37', hub_url = 'http://localhost:5555/wd/hub'):
+    def open_browser(self, local_browser_name='firefox', remote_browser_type='firefox',
+                     version='37', hub_url='http://localhost:5555/wd/hub'):
 
-        os.environ['webdriver.chrome.driver']=self.chrome_path
-        os.environ['webdriver.ie.driver']=self.ie_path
-        os.environ['webdriver.phantomjs.driver']=self.phantomjs_path
-        os.environ['webdriver.safari.driver']=self.safari_path
+        os.environ['webdriver.chrome.driver'] = self.chrome_path
+        os.environ['webdriver.ie.driver'] = self.ie_path
+        os.environ['webdriver.phantomjs.driver'] = self.phantomjs_path
+        os.environ['webdriver.safari.driver'] = self.safari_path
 
         capabilities = DesiredCapabilities
 
-        if(local_browser_name=='firefox'):
+        if (local_browser_name == 'firefox'):
             self.driver = webdriver.Firefox()
-        if(local_browser_name=='chrome'):
+        if (local_browser_name == 'chrome'):
             self.driver = webdriver.Chrome(self.chrome_path)
-        if(local_browser_name=='ie'):
-            #capabilities = DesiredCapabilities.INTERNETEXPLORER.copy()
+        if (local_browser_name == 'ie'):
+            # capabilities = DesiredCapabilities.INTERNETEXPLORER.copy()
             #capabilities['ignoreProtectedModeSettings'] = True
             self.driver = webdriver.Ie(self.ie_path)
-        if(local_browser_name=='phantomjs'):
+        if (local_browser_name == 'phantomjs'):
             self.driver = webdriver.PhantomJS(self.phantomjs_path)
-        if(local_browser_name=='safari'):
+        if (local_browser_name == 'safari'):
             self.driver = webdriver.Safari(self.safari_path)
-        if(local_browser_name=='remote'):
+        if (local_browser_name == 'remote'):
             print('Using remote browser')
-            if(remote_browser_type=='firefox'):
+            if (remote_browser_type == 'firefox'):
                 capabilities = DesiredCapabilities.FIREFOX.copy()
-            if(remote_browser_type=='chrome'):
+            if (remote_browser_type == 'chrome'):
                 capabilities = DesiredCapabilities.CHROME.copy()
-                #capabilities['platform'] = platform
-            if(remote_browser_type=='ie'):
+                # capabilities['platform'] = platform
+            if (remote_browser_type == 'ie'):
                 capabilities = DesiredCapabilities.INTERNETEXPLORER.copy()
-                #capabilities['platform'] = platform
-            if(remote_browser_type=='safari'):
+                # capabilities['platform'] = platform
+            if (remote_browser_type == 'safari'):
                 capabilities = DesiredCapabilities.SAFARI.copy()
-                #capabilities['platform'] = platform
-            if(remote_browser_type != 'firefox'):
+                # capabilities['platform'] = platform
+            if (remote_browser_type != 'firefox'):
                 capabilities['ignoreProtectedModeSettings'] = True
             capabilities['browserName'] = remote_browser_type
             capabilities['version'] = version
-            self.driver = webdriver.Remote(command_executor=hub_url,desired_capabilities=capabilities)
+            self.driver = webdriver.Remote(command_executor=hub_url, desired_capabilities=capabilities)
 
         self.driver.delete_all_cookies()
         self.driver.implicitly_wait(10)
@@ -122,6 +124,7 @@ class CommonMethods():
     """
         popup handle
     """
+
     def reject_popup(self, driver):
         try:
             alert = driver.switch_to.alert
@@ -156,7 +159,8 @@ class CommonMethods():
     """
         element handle
     """
-    def set_value_to_element(self, by, by_value, string_value):
+
+    def set_value_to_element(self, string_value, by, by_value):
         try:
             string_locator = self.driver.find_element(by, by_value)
             element_name = self.driver.find_element(by, by_value).get_attribute('name')
@@ -168,20 +172,21 @@ class CommonMethods():
     """
         element control
     """
-    def select_dropdown_by_value(self, driver, by, by_value, expected_value):
-        locator = driver.find_element(by,by_value)
+
+    def select_dropdown_by_value(self, driver, expected_value, by, by_value):
+        locator = driver.find_element(by, by_value)
         get_drop_down_values = locator.find_elements_by_tag_name("option")
         is_match = False
         for item in get_drop_down_values:
-            if(item.get_attribute("value") is not None
-            and item.get_attribute("value")==expected_value):
+            if (item.get_attribute("value") is not None
+                and item.get_attribute("value") == expected_value):
                 item.click()
                 is_match = True
                 break
-        if(is_match is not True):
+        if (is_match is not True):
             print(expected_value + ' not found in dropdown')
 
-    def select_dropdown_by_text(self, driver, by, by_value, expected_text):
+    def select_dropdown_by_text(self, driver, expected_text, by, by_value):
         try:
             select = Select(driver.find_element(by, by_value))
             select.select_by_visible_text(expected_text)
@@ -197,8 +202,9 @@ class CommonMethods():
     """
         Temp Section
     """
-    def click(self, by, by_value):
-        self.driver.find_element(by, by_value).click()
+
+    def click(self, driver, by, by_value):
+        driver.find_element(by, by_value).click()
 
     def assert_title(self, expected_title):
         actual_title = self.driver.title
