@@ -209,6 +209,3 @@ class CommonMethods(object):
     def assert_title(self, expected_title):
         actual_title = self.driver.title
         assert expected_title == actual_title, 'Expected: ' + expected_title + ' ' + 'Actual: ' + actual_title
-
-
-
