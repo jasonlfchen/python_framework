@@ -21,7 +21,7 @@ class ColossusTestCase(unittest.TestCase):
 
     def setUp(self):
         self.cm = CommonMethods()
-        self.cm.open_browser('chrome')
+        self.cm.open_browser('firefox')
         self.cm.navigate('https://qa2.esnapw.btctest.com/hts/TestAuthenticateMerchant.html')
         self.driver = self.cm.get_driver()
         logging.config.fileConfig('logging.ini')
@@ -67,12 +67,12 @@ class ColossusTestCase(unittest.TestCase):
         try:
             approval_page = ApprovalPage(self.driver)
             approval_page.verify_title('Capital One Canada Credit Card Application: Approved')
-            approval_page.print()
+            approval_page.print_display()
             self.driver = approval_page.get_driver()
         except:
             pending_page = PendingPage(self.driver)
             pending_page.verify_title('Capital One Canada Credit Card Application: Pending')
-            pending_page.print()
+            pending_page.print_display()
             self.driver = pending_page.get_driver()
 
 
