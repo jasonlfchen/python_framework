@@ -1,4 +1,4 @@
-__author__ = 'XMB089'
+__author__ = 'Yunxi Lin'
 
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
@@ -18,9 +18,6 @@ class TestAuthenticateMerchantPage(object):#BasePage
 
     def submit_merchant(self):
         self.cm.click(self.driver, *TestAuthenticateMerchantPageLocators.SUBMIT_BTN)
-
-    def verify_landing_title(self):
-        assert 'Capital One Canada Credit Card Application: Membership Verification' in self.driver.title
 
     def get_driver(self):
         return self.driver

@@ -160,11 +160,12 @@ class CommonMethods(object):
         element handle
     """
 
-    def set_value_to_element(self, string_value, by, by_value):
+    def set_value_to_element(self, driver, string_value, by, by_value):
         try:
-            string_locator = self.driver.find_element(by, by_value)
-            element_name = self.driver.find_element(by, by_value).get_attribute('name')
-            string_locator.send_keys(string_value)
+            element = driver.find_element(by, by_value)
+            element_name = driver.find_element(by, by_value).get_attribute('name')
+            element.clear()
+            element.send_keys(string_value)
             print(string_value + ' entered')
         except NoSuchElementException:
             print('Element ' + element_name + ' not found')

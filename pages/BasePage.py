@@ -1,19 +1,20 @@
 __author__ = 'XMB089'
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
-
+from selenium.webdriver.support import expected_conditions as EC
 from common.CommonMethods import CommonMethods
 
 
 class BasePage(object):
     """Base page object"""
 
-    implicit_wait = 10
-    cm = CommonMethods()
+    implicit_wait = 30
 
-    def __init__(self, resource_handler):
-        self.driver = resource_handler.driver
-        self.resource_handler = resource_handler
+    def __init__(self, driver):#resource_handler
+        #self.driver = resource_handler.driver
+        #self.resource_handler = resource_handler
+        self.driver = driver
+        self.cm = CommonMethods()
 
     def wait_until(self, by, value, timeout=5, parent_element=None):
 
@@ -38,6 +39,11 @@ class BasePage(object):
         finally:
             # set back to where you once belonged
             self.driver.implicitly_wait(self.implicit_wait)
+
+    def verify_title(self, expected_title):
+        wait = WebDriverWait(self.driver,600)
+        decision = wait.until(EC.title_is(expected_title))
+        assert expected_title == self.driver.title,'Expected: ' + expected_title + ' ' + 'Actual: ' + self.driver.title
 
     def get_driver(self):
         return self.driver

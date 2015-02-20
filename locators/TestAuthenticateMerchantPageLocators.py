@@ -1,4 +1,4 @@
-__author__ = 'XMB089'
+__author__ = 'Yunxi Lin'
 
 from selenium.webdriver.common.by import By
 
