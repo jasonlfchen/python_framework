@@ -9,6 +9,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import Select
+import logging
+import logging.config
+import logging
+import logging.config
 
 
 class CommonMethods(object):
@@ -18,6 +22,10 @@ class CommonMethods(object):
         self.ie_path = 'C:\\selenium\\driver\\IEDriverServer.exe'
         self.phantomjs_path = 'C:\\selenium\\driver\\phantomjs.exe'
         self.safari_path = ''
+        logging.config.fileConfig('logging.ini')
+        self.logger = logging.getLogger('fileLog')
+        logging.config.fileConfig('logging.ini')
+        self.logger = logging.getLogger('fileLog')
 
 
     """
@@ -29,7 +37,7 @@ class CommonMethods(object):
             app_url = base_url
         except:
             app_url = 'www.google.com'
-            print('URL not found, opening ' + app_url)
+            self.logger.info('URL not found, opening ' + app_url)
         return app_url
 
     def get_page(self, url):
@@ -41,11 +49,11 @@ class CommonMethods(object):
             self.get_page(get_url)
             self.driver.implicitly_wait(10)
         except:
-            print('No browser opened')
+            self.logger.info('No browser opened')
             self.open_browser()
             self.get_page(get_url)
             self.driver.implicitly_wait(10)
-            print('URL navigation')
+            self.logger.info('URL navigation')
 
     """
         browser control
@@ -84,7 +92,7 @@ class CommonMethods(object):
         if (local_browser_name == 'safari'):
             self.driver = webdriver.Safari(self.safari_path)
         if (local_browser_name == 'remote'):
-            print('Using remote browser')
+            self.logger.info('Using remote browser')
             if (remote_browser_type == 'firefox'):
                 capabilities = DesiredCapabilities.FIREFOX.copy()
             if (remote_browser_type == 'chrome'):
@@ -108,17 +116,17 @@ class CommonMethods(object):
 
     def close_browser(self):
         try:
-            print('Closing browser')
+            self.logger.info('Closing browser')
             self.driver.close()
-            print('Browser closed')
+            self.logger.info('Browser closed')
         except:
-            print('Browser is already closed')
+            self.logger.error('Browser is already closed')
 
     def teardown(self, driver):
-        print('Closing browser')
+        self.logger.info('Closing browser')
         driver.delete_all_cookies()
         driver.quit()
-        print('Browser closed')
+        self.logger.info('Browser closed')
 
 
     """
@@ -128,32 +136,32 @@ class CommonMethods(object):
     def reject_popup(self, driver):
         try:
             alert = driver.switch_to.alert
-            print('Attempting to dismiss alert')
+            self.logger.info('Attempting to dismiss alert')
             alert.dismiss()
             driver.switch_to.default_content()
-            print('Alert rejected')
+            self.logger.info('Alert rejected')
         except:
-            print('Alert not found')
+            self.logger.error('Alert not found')
 
     def accept_popup(self, driver):
         try:
             alert = self.driver.switch_to.alert
-            print('Attempting to accept alert')
+            self.logger.info('Attempting to accept alert')
             alert.accept()
             self.driver.switch_to.default_content()
-            print('Alert accepted')
+            self.logger.info('Alert accepted')
         except:
-            print('Alert not found')
+            self.logger.error('Alert not found')
 
 
     def send_keys_to_alert(self, driver, enter_text):
         try:
             alert = self.driver.switch_to.alert
-            print('Attempting to send keys to alert')
+            self.logger.info('Attempting to send keys to alert')
             alert.send_keys(enter_text)
-            print('Successfully entered ' + enter_text + ' into alert')
+            self.logger.info('Successfully entered ' + enter_text + ' into alert')
         except:
-            print('Alert not found')
+            self.logger.error('Alert not found')
 
 
     """
@@ -168,7 +176,7 @@ class CommonMethods(object):
             element.send_keys(string_value)
             print(string_value + ' entered')
         except NoSuchElementException:
-            print('Element ' + element_name + ' not found')
+            self.logger.error('Element: ' + element_name + ' not found')
 
     """
         element control
@@ -183,16 +191,19 @@ class CommonMethods(object):
                 and item.get_attribute("value") == expected_value):
                 item.click()
                 is_match = True
+                self.logger.info(expected_value + ' found')
                 break
         if (is_match is not True):
-            print(expected_value + ' not found in dropdown')
+            self.logger.error(expected_value + ' not found in dropdown')
 
     def select_dropdown_by_text(self, driver, expected_text, by, by_value):
         try:
             select = Select(driver.find_element(by, by_value))
             select.select_by_visible_text(expected_text)
+            self.logger.info(expected_text + ' found')
+            self.logger.info(expected_text + ' found')
         except:
-            print(expected_text + ' not found')
+            self.logger.error(expected_text + ' not found')
 
     def get_driver(self):
         return self.driver
@@ -206,6 +217,7 @@ class CommonMethods(object):
 
     def click(self, driver, by, by_value):
         driver.find_element(by, by_value).click()
+        self.logger.info(by_value + ' clicked')
 
     def assert_title(self, expected_title):
         actual_title = self.driver.title
