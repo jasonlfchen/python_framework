@@ -23,7 +23,7 @@ class ApplicationFormPage(BasePage):
         self.cm.click(self.driver, *AFL.CONSENT_CHECKBOX)
 
     def click_continue(self):
-        print('continue')
+        self.logger.info('continue')
         self.cm.click(self.driver, *AFL.CONTINUE_BTN)
 
 

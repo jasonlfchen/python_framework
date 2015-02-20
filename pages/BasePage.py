@@ -3,7 +3,8 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support import expected_conditions as EC
 from common.CommonMethods import CommonMethods
-
+import logging
+import logging.config
 
 class BasePage(object):
     """Base page object"""
@@ -15,6 +16,8 @@ class BasePage(object):
         #self.resource_handler = resource_handler
         self.driver = driver
         self.cm = CommonMethods()
+        logging.config.fileConfig('logging.ini')
+        self.logger = logging.getLogger('fileLog')
 
     def wait_until(self, by, value, timeout=5, parent_element=None):
 
@@ -43,7 +46,7 @@ class BasePage(object):
     def verify_title(self, expected_title):
         wait = WebDriverWait(self.driver, 30)
         decision = wait.until(EC.title_is(expected_title))
-        assert expected_title == self.driver.title,'Expected: ' + expected_title + ' ' + 'Actual: ' + self.driver.title
+        assert decision,'Expected: ' + expected_title + ' ' + 'Actual: ' + self.driver.title
 
     def get_driver(self):
         return self.driver

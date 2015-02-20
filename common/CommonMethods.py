@@ -11,8 +11,6 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import Select
 import logging
 import logging.config
-import logging
-import logging.config
 
 
 class CommonMethods(object):
@@ -22,8 +20,6 @@ class CommonMethods(object):
         self.ie_path = 'C:\\selenium\\driver\\IEDriverServer.exe'
         self.phantomjs_path = 'C:\\selenium\\driver\\phantomjs.exe'
         self.safari_path = ''
-        logging.config.fileConfig('logging.ini')
-        self.logger = logging.getLogger('fileLog')
         logging.config.fileConfig('logging.ini')
         self.logger = logging.getLogger('fileLog')
 
@@ -174,7 +170,7 @@ class CommonMethods(object):
             element_name = driver.find_element(by, by_value).get_attribute('name')
             element.clear()
             element.send_keys(string_value)
-            print(string_value + ' entered')
+            self.logger.info(string_value + ' entered')
         except NoSuchElementException:
             self.logger.error('Element: ' + element_name + ' not found')
 

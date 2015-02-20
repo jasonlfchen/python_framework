@@ -10,7 +10,7 @@ class OutOfWalletPage(BasePage):
 
     def answer_question_default(self):
         questions = WebDriverWait(self.driver, 60).until(EC.presence_of_all_elements_located((By.CSS_SELECTOR,'input[name="QuestionIds"]')))
-        print('%d questions' % len(questions))
+        self.logger.info('%d questions' % len(questions))
         for qs in questions:
             q_ID = qs.get_attribute('value')
             print('Question ' + q_ID)
@@ -20,12 +20,12 @@ class OutOfWalletPage(BasePage):
             for ans in answers:
                 if(ansNum == len(questions)):
                     self.cm.click(self.driver, By.TAG_NAME,'span')
-                    print('The last one default answer selected')
+                    self.logger.info('The last one default answer selected')
                     break
                 elif(ansStr is not None):
                     if(ans.get_text().contains(ansStr)):
                         self.cm.click(self.driver, By.TAG_NAME, 'span')
-                        print(q_ID + ' answer: ' + ans.get_text() + ' is checked')
+                        self.logger.info(q_ID + ' answer: ' + ans.get_text() + ' is checked')
                         break
             ++ ansNum
 
