@@ -10,6 +10,7 @@ from pages.ApplicationFormPage import ApplicationFormPage
 from pages.ReviewPage import ReviewPage
 from pages.OutOfWalletPage import OutOfWalletPage
 from pages.ApprovalPage import ApprovalPage
+from pages.PendingPage import PendingPage
 from selenium.webdriver.common.by import By
 from common.CommonMethods import CommonMethods
 
@@ -55,10 +56,16 @@ class ColossusTestCase(unittest.TestCase):
         except:
             print('OOW not displayed')
 
-        approval_page = ApprovalPage(self.driver)
-        approval_page.verify_title('Capital One Canada Credit Card Application: Approved')
-        approval_page.print()
-        self.driver = approval_page.get_driver()
+        try:
+            approval_page = ApprovalPage(self.driver)
+            approval_page.verify_title('Capital One Canada Credit Card Application: Approved')
+            approval_page.print()
+            self.driver = approval_page.get_driver()
+        except:
+            pending_page = PendingPage(self.driver)
+            pending_page.verify_title('Capital One Canada Credit Card Application: Pending')
+            pending_page.print()
+            self.driver = pending_page.get_driver()
 
 
 

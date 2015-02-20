@@ -41,7 +41,7 @@ class BasePage(object):
             self.driver.implicitly_wait(self.implicit_wait)
 
     def verify_title(self, expected_title):
-        wait = WebDriverWait(self.driver,600)
+        wait = WebDriverWait(self.driver, 30)
         decision = wait.until(EC.title_is(expected_title))
         assert expected_title == self.driver.title,'Expected: ' + expected_title + ' ' + 'Actual: ' + self.driver.title
 
