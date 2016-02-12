@@ -22,7 +22,7 @@ class ColossusTestCase(unittest.TestCase):
     def setUp(self):
         self.cm = CommonMethods()
         self.cm.open_browser('phantomjs')
-        self.cm.navigate('https://qa2.esnapw.btctest.com/hts/TestAuthenticateMerchant.html')
+        self.cm.navigate('')
         self.driver = self.cm.get_driver()
         logging.config.fileConfig('logging.ini')
         self.logger = logging.getLogger('fileLog')
